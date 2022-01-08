@@ -2,21 +2,17 @@ package com.example.myjpa.domain.order;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "member")
 @Getter
 @Setter
-@ToString
-public class Member extends BaseEntity{
+public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column(name = "name", nullable = false, length = 30)
@@ -33,13 +29,10 @@ public class Member extends BaseEntity{
     @Column(name = "description", nullable = true)
     private String description;
 
-
-
     @OneToMany(mappedBy = "member")
-    private List<Order> orders = new ArrayList<>();
+    private List<Order> orders;
 
-
-
+    // 연관관계 편의 메소드
     public void addOrder(Order order) {
         order.setMember(this);
     }
