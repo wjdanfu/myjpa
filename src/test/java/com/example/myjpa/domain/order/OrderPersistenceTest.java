@@ -26,12 +26,19 @@ public class OrderPersistenceTest {
 
     @Test
     void member_insert() {
+        EntityManager entityManager = emf.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+
+
         Member member = new Member();
-        member.setName("kanghonggu");
-        member.setAddress("서울시 동작구(만) 움직이면 쏜다.");
+        member.setName("bw");
+        member.setAddress("인천시");
         member.setAge(33);
-        member.setNickName("guppy.kang");
-        member.setDescription("백앤드 개발자에요.");
+        member.setNickName("court");
+        member.setDescription("백앤드 개발자가 되고 싶어요.");
+
+        entityManager.persist(member);
 
         ArrayList order = new ArrayList<>();
 
@@ -40,32 +47,29 @@ public class OrderPersistenceTest {
         order1.setOrderStatus(OPENED);
         order1.setUuid(UUID.randomUUID().toString());
         order1.setMemo("옷좀 보내주세요");
-        order1.setMember(member);
+        order1.setCratedAt(LocalDateTime.now());
+        order1.setCreatedBy("court");
+
 
         Order order2 = new Order();
         order2.setOrderDatetime(LocalDateTime.now());
         order2.setOrderStatus(OPENED);
         order2.setUuid(UUID.randomUUID().toString());
         order2.setMemo("옷좀 보내주세요2");
-        order2.setMember(member);
 
         order.add(order1);
         order.add(order2);
 
-        member.setOrders(order);
-        EntityManager entityManager = emf.createEntityManager();
-        EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-
-        entityManager.persist(member);
+        //member.setOrders(order);
+        member.addOrder(order1);
         entityManager.persist(order1);
         entityManager.persist(order2);
 
         transaction.commit();
 
 
-//        log.info("{}",order.getMember().getAddress());
-//        log.info("{}",order.getMember().getOrders().size());
+        log.info("{}",order1.getMember().getAge());
+        log.info("{}",member.getOrders().size());
     }
 
     @Test
